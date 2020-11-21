@@ -24,6 +24,7 @@ name: MySQL_SOTD
 Take a look at the Workbench
 
 Open Visual Studio
+Open the new application
 Open Python Environments
 Open Packages
-See if mysql-connector is installed
+See if mysql-connector is installed.  If not, instal it.
