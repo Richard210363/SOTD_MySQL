@@ -1,0 +1,29 @@
+
+
+Get MySQL:
+
+
+Go to:
+https://dev.mysql.com/downloads/windows/installer/8.0.html
+Windows (x86, 32-bit), MSI Installer
+Don't register --> No thanks, just start my download.
+Run the installer:
+
+Follow the Wizard
+
+Use LegacyAuthentication
+root password:  myrootpassword
+add user: 
+Role DB Admin:  Discuss other roles
+name: SOTD
+pw: SOTDPassword
+
+Run as Service
+name: MySQL_SOTD
+
+Take a look at the Workbench
+
+Open Visual Studio
+Open Python Environments
+Open Packages
+See if mysql-connector is installed
