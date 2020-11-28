@@ -4,7 +4,7 @@ db = mysql.connect(
     host = "localhost",
     user = "root",
     passwd = "myrootpassword",
-    #database = "sotd"
+    database = "sotd"
 )
 
 print(db)
@@ -199,9 +199,246 @@ cursor = db.cursor()
 #cursor.execute("DROP TABLE entities")
 
 
+
+
+######################################################################################################
+######################################################################################################
+######################################################################################################
+######################################################################################################
+######################################################################################################
+######################################################################################################
+
 #Still to come
 #Add more than 1 record at a time
 #Don't accept duplicate rows
 #More than 1 table in a database
 #Primary and Secondary keys
 #SELECT with JOIN
+
+#17
+######################################################################################################
+#Reset the table to new state.  Pick how you do this
+
+
+#18
+######################################################################################################
+##Add data in bulk
+#query = "INSERT INTO entities (name, type, lives) VALUES (%s, %s, %s)"
+
+#values = [
+#    ("Zombie01", "Enemy", 5),
+#    ("Shaun", "Player", 10),
+#    ("Zombie02", "Enemy", 5),
+#    ("Ed", "NPC", 8)
+#]
+
+
+#cursor.executemany(query, values) #execute the command
+#db.commit() # Tell the database to commit
+
+#if cursor.rowcount > 1:
+#    print(cursor.rowcount, "records inserted")
+#else:
+#    print(cursor.rowcount, "record inserted")  #<???
+
+#if cursor.rowcount > 1:
+#    outputText="records inserted"
+#else:
+#    outputText="record inserted"
+#print(cursor.rowcount, outputText)
+
+#19
+######################################################################################################
+#Delete the table
+#cursor.execute("DROP TABLE entities")
+
+#20
+######################################################################################################
+##A table with unique record IDs
+
+#cursor.execute("CREATE TABLE entities (id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), type VARCHAR(255), lives INT(10))")
+
+#Add several records.  Look at records in SQL Workbench
+
+#21
+######################################################################################################
+#Delete the table
+#cursor.execute("DROP TABLE entities")
+
+#22
+######################################################################################################
+#A table with unique records by single column
+
+#cursor.execute("""
+#        CREATE TABLE entities (
+#            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+#            name VARCHAR(255) UNIQUE, type VARCHAR(255), 
+#            lives INT(10))
+#            """)
+
+#Try to add several records.
+
+#query = "INSERT INTO entities (name, type, lives) VALUES (%s, %s, %s)"
+
+#values = [
+#    ("Zombie01", "Enemy", 5),
+#    ("Shaun", "Player", 10),
+#    ("Zombie01", "Enemy", 5),  #<----NOTE
+#    ("Ed", "NPC", 8)
+#]
+
+#cursor.executemany(query, values)
+#db.commit() 
+
+#23
+######################################################################################################
+#Delete the table
+#cursor.execute("DROP TABLE entities")
+
+
+#24
+######################################################################################################
+#A table with unique records by multiple columns
+
+#cursor.execute("""
+#        CREATE TABLE entities (
+#            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+#            name VARCHAR(255), type VARCHAR(255), 
+#            lives INT(10),
+#            CONSTRAINT uc_name_type UNIQUE (name , type))
+#            """)
+
+#Try to add several records.
+
+#query = "INSERT INTO entities (name, type, lives) VALUES (%s, %s, %s)"
+
+#values = [
+#    ("Zombie01", "Enemy", 5),
+#    ("Shaun", "Player", 10),
+#    ("Shaun", "Enemy", 5),  #<----NOTE
+#    ("Ed", "NPC", 8)
+#]
+
+#cursor.executemany(query, values)
+#db.commit() 
+
+
+#############################################################################################################################
+#############################################################################################################################
+#############################################################################################################################
+
+#Use of multiple tables
+
+#25
+######################################################################################################
+#Delete the table
+#cursor.execute("DROP TABLE entities")
+#cursor.execute("DROP TABLE npc")
+
+##26
+#######################################################################################################
+##Create Entity table - This is the same table we used above with UNIQUE name but missing lives
+##Create new npc table
+
+#cursor.execute("""
+#        CREATE TABLE entities (
+#            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+#            name VARCHAR(255) UNIQUE, 
+#            type VARCHAR(255))
+#            """)
+
+#cursor.execute("""
+#        CREATE TABLE npc (
+#            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+#            name VARCHAR(255) UNIQUE, 
+#            bullets VARCHAR(255), 
+#            lives INT(10))
+#            """)
+
+
+#27
+######################################################################################################
+#Add data
+
+#query = "INSERT INTO entities (name, type) VALUES (%s, %s)"
+
+#values = [
+#    ("Zombie01", "Enemy"),
+#    ("Shaun", "Player"),
+#    ("Zombie02", "Enemy"),
+#    ("Ed", "NPC"),
+#    ("Mum", "NPC")
+#]
+
+#cursor.executemany(query, values)
+#db.commit() 
+
+#query = "INSERT INTO npc (name, bullets, lives) VALUES (%s, %s, %s)"
+
+#values = [
+#    ("Ed", 50, 8),
+#    ("Mum", 0, 5)
+#]
+
+#cursor.executemany(query, values)
+#db.commit() 
+
+#28
+######################################################################################################
+#Select with an INNER JOIN
+
+#query = "SELECT \
+#  entities.name AS name, \
+#  npc.lives AS lives \
+#  FROM entities \
+#  INNER JOIN npc ON entities.name = npc.name"
+
+
+#cursor.execute(query)
+#records = cursor.fetchall()
+
+##print("=========================================")
+#print("Inner Join")
+### Showing the data
+#for record in records:
+#    print(record)
+
+##29
+#######################################################################################################
+##Select with a LEFT JOIN
+
+#query = "SELECT \
+#  entities.name AS name, \
+#  npc.lives AS lives \
+#  FROM entities \
+#  LEFT JOIN npc ON entities.name = npc.name"
+
+
+#cursor.execute(query)
+#records = cursor.fetchall()
+
+##print("=========================================")
+#print("Left Join")
+### Showing the data
+#for record in records:
+#    print(record)
+
+##30
+#######################################################################################################
+##Select with a RIGHT JOIN
+
+#query = "SELECT \
+#  entities.name AS name, \
+#  npc.lives AS lives \
+#  FROM entities \
+#  RIGHT JOIN npc ON entities.name = npc.name"
+
+
+#cursor.execute(query)
+#records = cursor.fetchall()
+
+##print("=========================================")
+#print("Right Join")
+### Showing the data
+#for record in records:
+#    print(record)    #<----??
