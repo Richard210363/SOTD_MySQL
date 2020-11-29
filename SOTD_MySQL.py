@@ -581,7 +581,6 @@ cursor = db.cursor()
 #Delete the table
 #cursor.execute("DROP TABLE entities")
 #cursor.execute("DROP TABLE npc")
-#cursor.execute("DROP TABLE entities")
 
 #41
 ######################################################################################################
