@@ -442,3 +442,205 @@ cursor = db.cursor()
 ### Showing the data
 #for record in records:
 #    print(record)    #<----??
+
+
+#############################################################################################################################
+#############################################################################################################################
+#############################################################################################################################
+
+# Different use of Primary and Foreign keys
+
+#31
+######################################################################################################
+#Delete the table
+#cursor.execute("DROP TABLE entities")
+#cursor.execute("DROP TABLE npc")
+
+#32
+######################################################################################################
+#Using the ID as the Foreigh Key
+
+#cursor.execute("""
+#        CREATE TABLE entities (
+#            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+#            name VARCHAR(255) UNIQUE, 
+#            type VARCHAR(255))
+#            """)
+
+#cursor.execute("""
+#        CREATE TABLE npc (
+#            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+#            entityid INT(11) NOT NULL,
+#            bullets VARCHAR(255), 
+#            lives INT(10))
+#            """)
+
+#33
+######################################################################################################
+##Insert data using the ID Foreign Key
+
+#query = "INSERT INTO entities (name, type) VALUES (%s, %s)"
+
+#values = ("Liz", "Player")   #Note.  No longer a Tuple      #Liz
+
+#cursor.execute(query, values)
+#db.commit() 
+
+#cursor.lastrowid
+
+#query = "INSERT INTO npc (entityid, bullets, lives) VALUES (%s, %s, %s)"
+
+#values = (cursor.lastrowid, 50, 8)
+
+#cursor.execute(query, values)
+#db.commit() 
+
+##Note: No bulk insert
+
+#34
+######################################################################################################
+#Problem
+
+#query = "INSERT INTO npc (entityid, bullets, lives) VALUES (%s, %s, %s)"
+
+#values = (12, 50, 8)
+
+#cursor.execute(query, values)
+#db.commit() 
+
+#35
+######################################################################################################
+#Delete the table
+#cursor.execute("DROP TABLE entities")
+#cursor.execute("DROP TABLE npc")
+
+#36
+######################################################################################################
+#Solution: Foreign Key constraints
+
+#cursor.execute("""
+#        CREATE TABLE entities (
+#            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+#            name VARCHAR(255) UNIQUE, 
+#            type VARCHAR(255))
+#            """)
+
+#cursor.execute("""
+#        CREATE TABLE npc (
+#            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+#            entityid INT(11) NOT NULL,
+#            bullets VARCHAR(255), 
+#            lives INT(10),
+#            CONSTRAINT entity_id
+#            FOREIGN KEY (entityid)
+#                REFERENCES entities(id))
+#            """)
+
+#37
+######################################################################################################
+##Redo insert
+
+#query = "INSERT INTO entities (name, type) VALUES (%s, %s)"
+
+#values = ("Shaun", "Player")
+
+#cursor.execute(query, values)
+#db.commit() 
+
+#cursor.lastrowid
+
+#query = "INSERT INTO npc (entityid, bullets, lives) VALUES (%s, %s, %s)"
+
+#values = (cursor.lastrowid, 50, 8)
+
+#cursor.execute(query, values)
+#db.commit() 
+
+#38
+######################################################################################################
+##And now?
+
+#query = "INSERT INTO npc (entityid, bullets, lives) VALUES (%s, %s, %s)"
+
+#values = (12, 50, 8)
+
+#cursor.execute(query, values)
+#db.commit() 
+
+#39
+######################################################################################################
+# And this?
+
+#query = "UPDATE entities SET id = 100 WHERE id = 1"
+
+#cursor.execute(query)
+#db.commit() 
+
+#40
+######################################################################################################
+#Delete the table
+#cursor.execute("DROP TABLE entities")
+#cursor.execute("DROP TABLE npc")
+#cursor.execute("DROP TABLE entities")
+
+#41
+######################################################################################################
+#Solution: Cascade
+
+#cursor.execute("""
+#        CREATE TABLE entities (
+#            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+#            name VARCHAR(255) UNIQUE, 
+#            type VARCHAR(255))
+#            """)
+
+#cursor.execute("""
+#        CREATE TABLE npc (
+#            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+#            entityid INT(11) NOT NULL,
+#            bullets VARCHAR(255), 
+#            lives INT(10),
+#            CONSTRAINT entity_id
+#            FOREIGN KEY (entityid)
+#                REFERENCES entities(id)
+#                   ON UPDATE CASCADE
+#                   ON DELETE CASCADE)
+#            """)
+
+#42
+######################################################################################################
+##Redo insert, encore
+
+#query = "INSERT INTO entities (name, type) VALUES (%s, %s)"
+
+#values = ("Shaun", "Player")   #Liz
+
+
+#cursor.execute(query, values)
+#db.commit() 
+
+#cursor.lastrowid
+
+#query = "INSERT INTO npc (entityid, bullets, lives) VALUES (%s, %s, %s)"
+
+#values = (cursor.lastrowid, 50, 8)
+
+#cursor.execute(query, values)
+#db.commit() 
+
+
+#43
+######################################################################################################
+# Try again
+
+#query = "UPDATE entities SET id = 100 WHERE id = 1"
+
+#cursor.execute(query)
+#db.commit() 
+
+
+##Notes:
+#ON UPDATE SET NULL
+#SET foreign_key_checks = 0 SET foreign_key_checks = 1
+#ALTER TABLE table_name 
+#DROP FOREIGN KEY constraint_name;
